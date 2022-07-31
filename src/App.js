@@ -10,7 +10,8 @@ class App extends Component {
   constructor (props){
     super(props);
     this.state = {
-      user:''
+      user:'',
+      image:''
     }
   }
 
@@ -18,9 +19,19 @@ class App extends Component {
   handleSubmit = async(e) => {
     e.preventDefault();
     console.log(e.target.userSearch.value);
-    const aa = await axios.get(`${process.env.REACT_APP_LOCATIONIQ_API_KEY}&q=${e.target.userSearch.value}&format=json`);
-    this.setState({user: aa.data[0]})
-    console.log(aa.data[0].lon)
+    const key = (process.env.REACT_APP_MAP_API_KEY);
+
+    const cityInfo = await axios.get(`https://eu1.locationiq.com/v1/search?key=${key}&q=${e.target.userSearch.value}&format=json`);
+    this.setState({user: cityInfo.data[0]})
+    console.log(process.env.REACT_APP_MAP_API_KEY);
+
+
+    
+    const res = await fetch(`https://maps.locationiq.com/v3/staticmap?key=${key}&center=${cityInfo.data[0].lat},${cityInfo.data[0].lon}&zoom=1-18`);
+    const imageBlob = await res.blob();
+    const imageObjectURL = URL.createObjectURL(imageBlob);
+    this.setState({image: imageObjectURL});
+
   }
   render () {
     return (
@@ -39,7 +50,7 @@ class App extends Component {
     </div>
         <div>
         <Tabs
-      defaultActiveKey="profile"
+      defaultActiveKey="home"
       id="uncontrolled-tab-example"
       className="mb-3"
     >
@@ -58,6 +69,7 @@ class App extends Component {
          
           
         </div>
+      <img src={this.state.image} />
     </div>
   );
 }
