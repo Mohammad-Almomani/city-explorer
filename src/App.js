@@ -10,19 +10,27 @@ class App extends Component {
     super(props);
     this.state = {
       user:'',
+      cityInfo:'',
       image:''
     }
   }
-
-
+  
   handleSubmit = async(e) => {
     e.preventDefault();
     console.log(e.target.userSearch.value);
     const key = (process.env.REACT_APP_MAP_API_KEY);
     if (e.target.userSearch.value !=''){
-      const cityInfo = await axios.get(`https://eu1.locationiq.com/v1/search?key=${key}&q=${e.target.userSearch.value}&format=json`);
-      console.log(cityInfo.data.length);
-      
+
+      axios.get(`https://eu1.locationiq.com/v1/search?key=${key}&q=${e.target.userSearch.value}&format=json`)
+    .then(resp => {
+      this.setState({cityInfo: resp})
+    })
+    .catch(err => {
+      console.error(err)
+        alert(`${err}`)
+    });
+
+      const cityInfo = await axios.get(`https://eu1.locationiq.com/v1/search?key=${key}&q=${e.target.userSearch.value}&format=json`);      
       
       this.setState({user: cityInfo.data[0]})
       
