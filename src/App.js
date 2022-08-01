@@ -14,16 +14,16 @@ class App extends Component {
       cityInfo:'',
       image:'',
       key:'',
-      weather:{},
+      weather:[],
+      clouds:[],
     }
   }
 
   handleSubmit = async(e) => {
     e.preventDefault();
     console.log(e.target.userSearch.value);
-    // const key = (process.env.REACT_APP_MAP_API_KEY);
     this.setState({key: process.env.REACT_APP_MAP_API_KEY});
-    if (e.target.userSearch.value !=''){
+    if (e.target.userSearch.value !='' && (e.target.userSearch.value=='Amman' || e.target.userSearch.value=='Seattle' || e.target.userSearch.value=='Paris' )){
       axios.get(`https://eu1.locationiq.com/v1/search?key=${process.env.REACT_APP_MAP_API_KEY}&q=${e.target.userSearch.value}&format=json`)
     .then(resp => {
       this.setState({cityInfo: resp})
@@ -46,14 +46,21 @@ class App extends Component {
     if (e.target.userSearch.value!='Amman' || e.target.userSearch.value!= "Seattle" || e.target.userSearch.value!= "Paris"){
     axios.get(`http://localhost:3000/weather?name=${e.target.userSearch.value}&lot=${cityInfo.data[0].lat}&lat=${cityInfo.data[0].lon}`)
     const getBack = await axios.get('http://localhost:3000/weather')
-    let asfs = getBack.data.data.splice(-1,1)
-console.log(getBack.data.data)
+    let usefullData = getBack.data.data.splice(-3)[1]
+    this.setState ({weather: this.state.weather = usefullData})
+    console.log(this.state.weather)
+    console.log (usefullData.data[0].weather.description)
+    
+    const displayData = [`day: ${this.state.weather.data[0].valid_date}`,`description: ${this.state.weather.data[0].weather.description}`]
+    this.setState({clouds: this.state.clouds=displayData})
+    
+    console.log(displayData)
     }
     else return alert('nnnnn')
 
     }
 
-else return alert("City name can't be empty")
+else return alert("Please choose a valid city: Amman, Seattle or Paris")
 }
 
 
@@ -99,7 +106,8 @@ else return alert("City name can't be empty")
         <img src={this.state.image} />
 
       </div>
-
+      <p>{this.state.clouds[0]}</p>
+      <p>{this.state.clouds[1]}</p>
     </div>
   );
 }
