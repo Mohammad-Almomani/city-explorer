@@ -3,6 +3,7 @@ import './App.css';
 import axios from 'axios';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
+import WeatherInfo from './weather';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 class App extends Component {
@@ -11,17 +12,19 @@ class App extends Component {
     this.state = {
       user:'',
       cityInfo:'',
-      image:''
+      image:'',
+      key:'',
+      weather:{},
     }
   }
-  
+
   handleSubmit = async(e) => {
     e.preventDefault();
     console.log(e.target.userSearch.value);
-    const key = (process.env.REACT_APP_MAP_API_KEY);
+    // const key = (process.env.REACT_APP_MAP_API_KEY);
+    this.setState({key: process.env.REACT_APP_MAP_API_KEY});
     if (e.target.userSearch.value !=''){
-
-      axios.get(`https://eu1.locationiq.com/v1/search?key=${key}&q=${e.target.userSearch.value}&format=json`)
+      axios.get(`https://eu1.locationiq.com/v1/search?key=${process.env.REACT_APP_MAP_API_KEY}&q=${e.target.userSearch.value}&format=json`)
     .then(resp => {
       this.setState({cityInfo: resp})
     })
@@ -29,24 +32,35 @@ class App extends Component {
       console.error(err)
         alert(`${err}`)
     });
+    const cityInfo = await axios.get(`https://eu1.locationiq.com/v1/search?key=${process.env.REACT_APP_MAP_API_KEY}&q=${e.target.userSearch.value}&format=json`);      
+    
+    this.setState({user: cityInfo.data[0]})
+    
+    
+    const res = await fetch(`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_MAP_API_KEY}&center=${cityInfo.data[0].lat},${cityInfo.data[0].lon}&zoom=16`);
+    const imageBlob = await res.blob();
+    const imageObjectURL = URL.createObjectURL(imageBlob);
+    this.setState({image: imageObjectURL});
 
-      const cityInfo = await axios.get(`https://eu1.locationiq.com/v1/search?key=${key}&q=${e.target.userSearch.value}&format=json`);      
-      
-      this.setState({user: cityInfo.data[0]})
-      
-      const res = await fetch(`https://maps.locationiq.com/v3/staticmap?key=${key}&center=${cityInfo.data[0].lat},${cityInfo.data[0].lon}&zoom=`);
-      const imageBlob = await res.blob();
-      const imageObjectURL = URL.createObjectURL(imageBlob);
-      this.setState({image: imageObjectURL});
+    
+    if (e.target.userSearch.value!='Amman' || e.target.userSearch.value!= "Seattle" || e.target.userSearch.value!= "Paris"){
+    axios.get(`http://localhost:3000/weather?name=${e.target.userSearch.value}&lot=${cityInfo.data[0].lat}&lat=${cityInfo.data[0].lon}`)
+    const getBack = await axios.get('http://localhost:3000/weather')
+    let asfs = getBack.data.data.splice(-1,1)
+console.log(getBack.data.data)
+    }
+    else return alert('nnnnn')
 
     }
-    else return alert("City name can't be empty")
 
-  }
+else return alert("City name can't be empty")
+}
+
+
+
   render () {
     return (
-      <div className="App">
-        
+      <div className="App"> 
       <div>
         <br></br>
       <h1>City Explore</h1>
@@ -58,6 +72,7 @@ class App extends Component {
           <button type='submit'>Explore!</button>
         </form>
       <br></br>
+
     </div>
         <div>
           
@@ -75,10 +90,15 @@ class App extends Component {
       </Tab>
     </Tabs>
 
-          
         </div>
-      <img src={this.state.image} />
+      <div id='weather'>
+        </div>
+        
+        <div>
+       
+        <img src={this.state.image} />
 
+      </div>
 
     </div>
   );
