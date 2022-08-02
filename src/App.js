@@ -64,6 +64,9 @@ showWeather = async(lat,lon)=> {
     })
   } catch (err){
     swal(`We can't show weather info for ${this.state.searchQuery} \n ${err} \n click ok to show the map without weather info`)
+    this.setState({
+      weather: '',
+    })
   };
 }
 
