@@ -4,6 +4,7 @@ import axios from 'axios';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import WeatherInfo from './weather';
+import MoviesRec from './Movies';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import swal from 'sweetalert';
 
@@ -19,28 +20,28 @@ class App extends Component {
       clouds:[],
       test:'',
       searchQuery:'',
+      moviesArr:'',
     }
   }
 
   handleSubmit = async(e) => {
     e.preventDefault();
     console.log(e.target.userSearch.value);
-    
+  
     this.setState({key: process.env.REACT_APP_MAP_API_KEY,
     searchQuery: e.target.userSearch.value
     });
     if (e.target.userSearch.value !=''){
       axios.get(`https://eu1.locationiq.com/v1/search?key=${process.env.REACT_APP_MAP_API_KEY}&q=${e.target.userSearch.value}&format=json`)
     .then(resp => {
-      this.showWeather()
       this.setState({cityInfo: resp})
     })
     .catch(err => {
       console.error(err)
-        alert(`${err}`)
+      swal(`${err}`);
     });
     const cityInfo = await axios.get(`https://eu1.locationiq.com/v1/search?key=${process.env.REACT_APP_MAP_API_KEY}&q=${e.target.userSearch.value}&format=json`);      
-    
+    this.showWeather(cityInfo.data[0].lat,cityInfo.data[0].lon)
     this.setState({user: cityInfo.data[0]})
     
     
@@ -48,8 +49,12 @@ class App extends Component {
     const imageBlob = await res.blob();
     const imageObjectURL = URL.createObjectURL(imageBlob);
     this.setState({image: imageObjectURL});
-
+    
     console.log(this.state.weather.data)
+    
+    this.findMovies(e.target.userSearch.value)
+
+    
   }
 
 else return swal("Please choose a valid city, Amman, Seattle or Paris")
@@ -57,7 +62,7 @@ else return swal("Please choose a valid city, Amman, Seattle or Paris")
 
 showWeather = async(lat,lon)=> {
   try {
-    const getBack = await  axios.get(`http://localhost:3000/weather?name=${this.state.searchQuery}`)
+    const getBack = await  axios.get(`http://localhost:3000/weather?name=${this.state.searchQuery}&lon=${lon}&lat=${lat}`)
     console.log(getBack) 
     this.setState({
       weather: getBack,
@@ -70,6 +75,20 @@ showWeather = async(lat,lon)=> {
   };
 }
 
+findMovies = async(a)=> {
+  try {
+    const getMovie = await  axios.get(`http://localhost:3000/movies?movieName=${a}`)
+    console.log(getMovie.data) 
+    this.setState({
+      moviesArr: getMovie,
+    })
+  } catch (err){
+    // swal(`We can't find recommendations for ${this.state.searchQuery} \n ${err} \n click ok to show the map without movies recommendations`)
+    this.setState({
+      moviesArr: '',
+    })
+  };
+}
 
   render () {
     return (
@@ -118,8 +137,16 @@ showWeather = async(lat,lon)=> {
       )}
 
       {this.state.weather!=''&&(
-      <>
+      <div id='weatherInfo'>
+      <br></br>
       <WeatherInfo weather={this.state.weather} />
+      <br></br>
+      </div>
+      )
+      }
+      {this.state.weather!=''&&(
+      <>
+      <MoviesRec moviesArr={this.state.moviesArr} />
       </>
       )
       }
