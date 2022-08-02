@@ -62,7 +62,7 @@ else return swal("Please choose a valid city, Amman, Seattle or Paris")
 
 showWeather = async(lat,lon)=> {
   try {
-    const getBack = await  axios.get(`http://localhost:3000/weather?name=${this.state.searchQuery}&lon=${lon}&lat=${lat}`)
+    const getBack = await  axios.get(`${process.env.REACT_APP_SERVER_LINK}/weather?name=${this.state.searchQuery}&lon=${lon}&lat=${lat}`)
     console.log(getBack) 
     this.setState({
       weather: getBack,
@@ -77,7 +77,7 @@ showWeather = async(lat,lon)=> {
 
 findMovies = async(a)=> {
   try {
-    const getMovie = await  axios.get(`http://localhost:3000/movies?movieName=${a}`)
+    const getMovie = await  axios.get(`${process.env.REACT_APP_SERVER_LINK}/movies?movieName=${a}`)
     console.log(getMovie.data) 
     this.setState({
       moviesArr: getMovie,
