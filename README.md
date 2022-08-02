@@ -3,10 +3,18 @@
 **Author**: Your Name Goes Here
 **Version**: 1.0.0 (increment the patch/fix version number if you make more commits past your first submission)
 
-# Class 6:
+# Class 7:
 
+class 7
 
 ![](./public/wireframe.png)
+
+
+class 8
+
+
+![](unknown.png)
+
 
 ## Overview
 <!-- Provide a high level overview of what this application is and why you are building it, beyond the fact that it's an assignment for this class. (i.e. What's your problem domain?) -->
@@ -38,7 +46,7 @@ We used react.js to buil this lovely website, we used bootstrap to make it cool
 
 I worked with my awesome college Omar Qattan, he was a big support to me and did our job at a good level
 
-## Time Estimates
+## Time Estimates Class 7
 
 Name of feature: #3 react bootstrap, form, display
 
@@ -49,3 +57,17 @@ Start time: 1:00 pm
 Finish time: 9:00 pm
 
 Actual time needed to complete: 7 hours
+
+
+
+## Time Estimates Class 8
+
+Name of feature: #4 react bootstrap, form, display, axios
+
+Estimate of time needed to complete: 5 hours
+
+Start time: 6:00 pm
+
+Finish time: 10:00 pm
+
+Actual time needed to complete: 3 hours
