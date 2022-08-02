@@ -2,15 +2,30 @@ import { Component } from "react";
 
 
 export default class WeatherInfo extends Component{
-    constructor(props){
-        super(props);
-    }
 
     render (){
         return (
             <>
-            <p> {this.props.weather.data[0].datetime}</p>
-            {console.log(this.props.weather.data[0].datetime)}
+            {/* {
+                this.props.weather.data
+            } */}
+
+                { this.props.weather.data.map(day => {
+
+                    return (
+                        <>
+                                {console.log(day)}
+                        <p>{day.date} {day.description}</p>
+                      
+                        </>
+
+                    )
+                })
+
+
+                }
+
+           {/* <p>{this.props.weather.de.dayscription}</p> */}
             </>
         )
     }
