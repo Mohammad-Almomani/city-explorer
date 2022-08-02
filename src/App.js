@@ -52,7 +52,7 @@ class App extends Component {
     console.log(this.state.weather.data)
   }
 
-else return swal("Please choose a valid city, Example: Amman, Seattle or Paris")
+else return swal("Please choose a valid city, Amman, Seattle or Paris")
 }
 
 showWeather = async(lat,lon)=> {
@@ -88,7 +88,7 @@ showWeather = async(lat,lon)=> {
 
     </div>
         <div>
-          
+        {this.state.weather!=''&&(
         <Tabs
       defaultActiveKey="home"
       id="uncontrolled-tab-example"
@@ -102,20 +102,26 @@ showWeather = async(lat,lon)=> {
       <p>City longitude {this.state.user.lon}</p> 
       </Tab>
     </Tabs>
-
+        )}
         </div>
       <div id='weather'>
         </div>
         
         <div>
+        {this.state.weather!=''&&(
        
         <img src={this.state.image} width="30%" />
-
+          )}
       </div>
-      {this.state.weather!=''&&
+      {this.state.weather==''&&(
+        <p>Please choose a valid city, Example: Amman, Seattle or Paris</p>
+      )}
+
+      {this.state.weather!=''&&(
       <>
       <WeatherInfo weather={this.state.weather} />
       </>
+      )
       }
 
     </div>
