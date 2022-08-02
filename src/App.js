@@ -5,6 +5,7 @@ import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import WeatherInfo from './weather';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import swal from 'sweetalert';
 
 class App extends Component {
   constructor (props){
@@ -14,19 +15,24 @@ class App extends Component {
       cityInfo:'',
       image:'',
       key:'',
-      weather:[],
+      weather:'',
       clouds:[],
       test:'',
+      searchQuery:'',
     }
   }
 
   handleSubmit = async(e) => {
     e.preventDefault();
     console.log(e.target.userSearch.value);
-    this.setState({key: process.env.REACT_APP_MAP_API_KEY});
-    if (e.target.userSearch.value !='' && (e.target.userSearch.value=='Amman' || e.target.userSearch.value=='Seattle' || e.target.userSearch.value=='Paris' )){
+    
+    this.setState({key: process.env.REACT_APP_MAP_API_KEY,
+    searchQuery: e.target.userSearch.value
+    });
+    if (e.target.userSearch.value !=''){
       axios.get(`https://eu1.locationiq.com/v1/search?key=${process.env.REACT_APP_MAP_API_KEY}&q=${e.target.userSearch.value}&format=json`)
     .then(resp => {
+      this.showWeather()
       this.setState({cityInfo: resp})
     })
     .catch(err => {
@@ -43,27 +49,23 @@ class App extends Component {
     const imageObjectURL = URL.createObjectURL(imageBlob);
     this.setState({image: imageObjectURL});
 
-    
-    if (e.target.userSearch.value!='Amman' || e.target.userSearch.value!= "Seattle" || e.target.userSearch.value!= "Paris"){
-    axios.get(`http://localhost:3000/weather?name=${e.target.userSearch.value}&lot=${cityInfo.data[0].lat}&lat=${cityInfo.data[0].lon}`)
-   
-    const getBack = await axios.get('http://localhost:3000/weather')
-    let usefullData = getBack.data.data.splice(-3)[1]
-    this.setState ({weather: this.state.weather = usefullData})
-    console.log(this.state.weather)
-    console.log (usefullData.data[0].weather.description)
-    
-    const displayData = [`day: ${this.state.weather.data[0].valid_date} `,`description: ${this.state.weather.data[0].weather.description} `,`day: ${this.state.weather.data[1].valid_date} `,`description: ${this.state.weather.data[1].weather.description} `]
-    this.setState({clouds: this.state.clouds=displayData})
-    
-    console.log(displayData)
-    }
+    console.log(this.state.weather.data)
+  }
 
-    }
-
-else return alert("Please choose a valid city: Amman, Seattle or Paris")
+else return swal("Please choose a valid city, Example: Amman, Seattle or Paris")
 }
 
+showWeather = async(lat,lon)=> {
+  try {
+    const getBack = await  axios.get(`http://localhost:3000/weather?name=${this.state.searchQuery}`)
+    console.log(getBack) 
+    this.setState({
+      weather: getBack,
+    })
+  } catch (err){
+    swal(`We can't show weather info for ${this.state.searchQuery} \n ${err} \n click ok to show the map without weather info`)
+  };
+}
 
 
   render () {
@@ -104,14 +106,15 @@ else return alert("Please choose a valid city: Amman, Seattle or Paris")
         
         <div>
        
-        <img src={this.state.image} />
+        <img src={this.state.image} width="30%" />
 
       </div>
-      {/* <WeatherInfo {...this.props} {...this.state} /> */}
-      <a>{this.state.clouds[0]}</a>
-      <a>{this.state.clouds[1]}</a>
-      <a>{this.state.clouds[2]}</a>
-      <a>{this.state.clouds[3]}</a>
+      {this.state.weather!=''&&
+      <>
+      <WeatherInfo weather={this.state.weather} />
+      </>
+      }
+
     </div>
   );
 }
