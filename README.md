@@ -1,11 +1,12 @@
 # Project Name
 
-**Author**: Your Name Goes Here
-**Version**: 1.0.0 (increment the patch/fix version number if you make more commits past your first submission)
+**Author**: Mohammad Almomani
+**Version**: 1.0.0
 
 # Class 7:
 
 class 7
+
 
 ![](./public/wireframe.png)
 
@@ -13,6 +14,13 @@ class 7
 class 8
 
 
+![](unknown.png)
+
+
+class 9
+
+
+same as yesterday 
 ![](unknown.png)
 
 
@@ -37,6 +45,12 @@ We used react.js to buil this lovely website, we used bootstrap to make it cool
 07-31-2022 6:45pm:  added a component that displays the name and the exact location of the city
 
 07-31-2022 7:35pm:  added the static map of the city
+
+08-1-2022 8:35pm:  added old weather status
+
+08-2 -2022 7:0pm:  added live weather status
+
+08-2-2022 8:30pm:  added the movies recommendations section
 
 
 
@@ -71,3 +85,16 @@ Start time: 6:00 pm
 Finish time: 10:00 pm
 
 Actual time needed to complete: 3 hours
+
+
+## Time Estimates Class 9
+
+Name of feature: #4 react bootstrap, form, display, axios
+
+Estimate of time needed to complete: 30 minutes
+
+Start time: 12:30 pm
+
+Finish time: 12:45 pm
+
+Actual time needed to complete: 15 minutes
