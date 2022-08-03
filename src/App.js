@@ -1,10 +1,9 @@
 import { Component } from 'react';
 import './App.css';
 import axios from 'axios';
-import Tab from 'react-bootstrap/Tab';
-import Tabs from 'react-bootstrap/Tabs';
-import WeatherInfo from './weather';
-import MoviesRec from './Movies';
+import WeatherInfo from './Components/Weather';
+import MoviesRec from './Components/Movies';
+import CityTabs from './Components/CityTabs';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import swal from 'sweetalert';
 
@@ -83,7 +82,6 @@ findMovies = async(a)=> {
       moviesArr: getMovie,
     })
   } catch (err){
-    // swal(`We can't find recommendations for ${this.state.searchQuery} \n ${err} \n click ok to show the map without movies recommendations`)
     this.setState({
       moviesArr: '',
     })
@@ -108,19 +106,7 @@ findMovies = async(a)=> {
     </div>
         <div>
         {this.state.weather!=''&&(
-        <Tabs
-      defaultActiveKey="home"
-      id="uncontrolled-tab-example"
-      className="mb-3"
-    > 
-      <Tab eventKey="home" title="City Name">
-      <p> {this.state.user.display_name}</p>
-      </Tab>
-      <Tab eventKey="profile" title="Geographic coordination">
-      <p>City latitude {this.state.user.lat} </p>
-      <p>City longitude {this.state.user.lon}</p> 
-      </Tab>
-    </Tabs>
+          <CityTabs display_name={this.state.user.display_name} lat={this.state.user.lat} lon={this.state.user.lon} />
         )}
         </div>
       <div id='weather'>
