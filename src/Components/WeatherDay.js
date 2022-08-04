@@ -6,7 +6,7 @@ export default class WeatherDay extends Component{
 
         return (
             <>
-            <p>{this.props.date} {this.props.description}</p>
+            <p>{this.props.date} {this.props.description} <br></br> Data saved at: {this.props.dataSaveDate}</p>
             </>
         )
     }

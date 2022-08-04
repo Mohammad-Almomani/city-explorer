@@ -11,7 +11,7 @@ export default class WeatherInfo extends Component{
                     return (
                         <>
                                 {console.log(day)}
-                                <WeatherDay date={day.date} description={day.description}/>                      
+                                <WeatherDay date={day.date} description={day.description} dataSaveDate={day.dataSaveDate}/>                      
                         </>
 
                     )
