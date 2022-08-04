@@ -130,7 +130,7 @@ findMovies = async(a)=> {
       </div>
       )
       }
-      {this.state.weather!=''&& this.state.moviesArr!=''&&(
+      {this.state.moviesArr!=''&&(
       <>
       <MoviesRec moviesArr={this.state.moviesArr} />
       </>
