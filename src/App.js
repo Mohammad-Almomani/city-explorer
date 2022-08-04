@@ -53,7 +53,8 @@ class App extends Component {
     
     this.findMovies(e.target.userSearch.value)
 
-    
+    // console.time("dbsave");
+    // console.timeEnd("dbsave");
   }
 
 else return swal("Please choose a valid city, Amman, Seattle or Paris")
@@ -77,7 +78,6 @@ showWeather = async(lat,lon)=> {
 findMovies = async(a)=> {
   try {
     const getMovie = await  axios.get(`${process.env.REACT_APP_SERVER_LINK}/movies?movieName=${a}`)
-    console.log(getMovie.data) 
     this.setState({
       moviesArr: getMovie,
     })
